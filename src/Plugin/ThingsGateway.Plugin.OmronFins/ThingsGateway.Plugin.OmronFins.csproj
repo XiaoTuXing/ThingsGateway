@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+    <RazorCompileOnBuild>true</RazorCompileOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Foundation\**\*.cs" />
+    <Compile Include="OmronFinsMaster\**\*.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Pages\**\*.razor" CopyToOutputDirectory="Never" />
+    <Content Include="Locales\**\*.json" CopyToOutputDirectory="Always" />
+    <None Include="README.md" />
+  </ItemGroup>
+</Project>
