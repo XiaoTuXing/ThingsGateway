@@ -1,0 +1,143 @@
+using System;
+using System.Collections.Generic;
+using System.Dynamic;
+using System.Linq;
+using System.Threading.Tasks;
+using DalSoft.RestClient;
+using Microsoft.CodeAnalysis.CSharp.Scripting;
+using Microsoft.CodeAnalysis.Scripting;
+
+public static class SuperSimpleRestClient
+{
+    /// <summary>
+    /// 超级简化版动态请求：所有配置放字典，一行调用
+    /// </summary>
+    /// <param name="configDict">所有配置（key固定，看下面说明）</param>
+    /// <returns>请求是否成功</returns>
+    public static async Task<bool> SendRequestAsync(Dictionary<string, object> configDict)
+    {
+        try
+        {
+            // 1. 从字典提取配置（默认值兜底，避免报错）
+            string url = configDict.GetValueOrDefault("url", "").ToString();
+            string httpMethod = configDict.GetValueOrDefault("httpMethod", "get").ToString().Trim().ToLower();
+            object requestBody = configDict.GetValueOrDefault("requestBody", null);
+            object successCondition = configDict.GetValueOrDefault("successCondition", "code == 0"); // 默认条件
+            var headers = configDict.GetValueOrDefault("headers", new Dictionary<string, string>()) as Dictionary<string, string>;
+            string token = configDict.GetValueOrDefault("token", "").ToString();
+            int timeoutSeconds = int.TryParse(configDict.GetValueOrDefault("timeoutSeconds", 10).ToString(), out int t) ? t : 10;
+
+            // 2. 校验必填项（URL不能为空）
+            if (string.IsNullOrWhiteSpace(url))
+                return false;
+
+            // 3. 构建客户端配置（超时 + 请求头）
+            var clientConfig = new RestClientConfig
+            {
+                Timeout = TimeSpan.FromSeconds(timeoutSeconds)
+            };
+
+            // 4. 添加请求头
+            if (headers != null)
+            {
+                foreach (var header in headers)
+                    clientConfig.Headers.Add(header.Key, header.Value);
+            }
+
+            // 5. 添加 Bearer Token
+            if (!string.IsNullOrWhiteSpace(token))
+            {
+                clientConfig.Headers.Add("Authorization", $"Bearer {token}");
+            }
+
+            // 6. 发送请求
+            dynamic client = new RestClient(clientConfig);
+            dynamic response = httpMethod switch
+            {
+                "get" => await client.Get(url),
+                "post" => await client.Post(url, requestBody),
+                "put" => await client.Put(url, requestBody),
+                "delete" => await client.Delete(url),
+                _ => throw new NotSupportedException($"不支持的请求类型：{httpMethod}")
+            };
+
+            // 7. 执行成功条件（字符串/ Lambda 都支持）
+            return await EvaluateSuccessCondition(response, successCondition);
+        }
+        catch
+        {
+            // 任何异常都返回 false
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// 解析成功条件（复用之前的核心逻辑）
+    /// </summary>
+    private static async Task<bool> EvaluateSuccessCondition(dynamic res, object condition)
+    {
+        try
+        {
+            if (condition is string conditionStr)
+            {
+                var options = ScriptOptions.Default
+                    .WithReferences(AppDomain.CurrentDomain.GetAssemblies()
+                    .Where(a => !a.IsDynamic && !string.IsNullOrEmpty(a.Location)))
+                    .WithImports("System", "System.Linq");
+
+                return await CSharpScript.EvaluateAsync<bool>(
+                    conditionStr, options, globals: new DynamicGlobal(res));
+            }
+            else if (condition is Func<dynamic, bool> func)
+            {
+                return func(res);
+            }
+        }
+        catch { }
+
+        return false;
+    }
+
+    /// <summary>
+    /// 动态脚本全局对象（支持任意字段访问）
+    /// </summary>
+    public class DynamicGlobal
+    {
+        private readonly dynamic _res;
+        public DynamicGlobal(dynamic res) => _res = res;
+
+        public dynamic res => _res;
+        public dynamic code => _res?.code;
+        public dynamic success => _res?.success;
+        public dynamic data => _res?.data;
+        public dynamic message => _res?.message;
+        public dynamic status => _res?.status;
+
+        public bool TryGetMember(GetMemberBinder binder, out object result)
+        {
+            result = _res?[binder.Name] ?? null;
+            return true;
+        }
+    }
+	
+	// 1. 可视化配置所有参数（字典里填值即可）
+	var config = new Dictionary<string, object>
+	{
+		{ "url", "https://xxx.com/api/login" },          // 接口地址
+		{ "httpMethod", "post" },                        // 请求类型
+		{ "requestBody", new { username = "test", pwd = "123" } }, // 动态JSON
+		{ "successCondition", "code == 0" },             // 字符串成功条件
+		{ "token", "你的BearerToken123" },               // Token
+		{ "timeoutSeconds", 15 },                        // 超时15秒
+		{ "headers", new Dictionary<string, string>      // 自定义请求头
+			{
+				{ "Version", "1.0.0" },
+				{ "Platform", "PC" }
+			}
+		}
+	};
+
+	// 2. 一行调用，直接拿结果（bool）
+	bool isSuccess = await SuperSimpleRestClient.SendRequestAsync(config);
+	Console.WriteLine("请求结果：" + isSuccess);
+}
