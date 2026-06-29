@@ -1,0 +1,13 @@
+﻿
+using ThingsGateway.Blazor.Diagrams.Core.Geometry;
+namespace ThingsGateway.Gateway.Application;
+
+public abstract class TextNode : PlaceholderNode
+{
+    public TextNode(string id, Point? position = null) : base(id, position)
+    {
+    }
+
+    [ModelValue]
+    public virtual string Text { get; set; }
+}

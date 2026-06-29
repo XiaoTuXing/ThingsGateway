@@ -1,0 +1,4 @@
+{
+  "LogFileMaxBytes": "5", //5mb最大日志文件
+  "LogFileBackups": "50" //50个日志文件
+}

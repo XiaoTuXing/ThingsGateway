@@ -1,0 +1,110 @@
+﻿{
+
+
+  "ThingsGateway.Debug.ValueTransformType": {
+    "None": "None",
+    "Linear": "Linear",
+    "Sqrt": "Sqrt"
+  },
+
+  "ThingsGateway.Debug.ValueTransformConfig": {
+    "TransformType": "TransformType",
+    "MinMax": "MinMax",
+    "ClampToRawRange": "ClampToRawRange",
+    "DecimalPlaces": "DecimalPlaces",
+    "RawMin": "RawMin",
+    "RawMax": "RawMax",
+    "ActualMin": "ActualMin",
+    "ActualMax": "ActualMax"
+  },
+
+  "ThingsGateway.Debug.ChannelComponent": {
+    "BaudRate": "Baud Rate",
+    "BindUrl": "Local Bind IP Address",
+    "Channel": "Channel",
+    "ChannelType": "Channel Type",
+    "ClearChannel": "Clear Channel",
+    "Confim": "Confim",
+    "Connect": "Connect",
+    "DataBits": "Data Bits",
+    "DeleteChannel": "Delete Channel",
+    "Disconnect": "Disconnect",
+    "DtrEnable": "Dtr",
+    "Enable": "Enable",
+    "ExportChannel": "Export Channel",
+    "ImportChannel": "Import Channel",
+    "ImportNullError": "Unable to recognize",
+    "LogEnable": "Enable Debug Log",
+    "Name": "Name",
+    "Name.Required": "{0} cannot be empty",
+    "NotOther": "Not supporting other channel types",
+    "Parity": "Parity",
+    "PortName": "COM Port",
+    "RemoteUrl": "Remote IP Address",
+    "RtsEnable": "Rts",
+    "StreamAsync": "StreamAsync",
+    "Handshake": "Handshake",
+    "SaveChannel": "Add/Modify Channel",
+    "StopBits": "Stop Bits"
+  },
+  "ThingsGateway.Debug.ChannelEditComponent": {
+    "BasicInformation": "Basic Information",
+    "Connection": "Connection"
+  },
+  "ThingsGateway.Debug.ConverterConfigComponent": {
+    "Converter": "Converter"
+  },
+  "ThingsGateway.Debug.DeviceComponent": {
+    "ArrayLength": "ArrayLength",
+    "CommonFunctions": "Common Functions",
+    "DataType": "DataType",
+    "DefaultSend": "DefaultSend",
+    "HeaderText": "Channel Log",
+    "MulRead": "Multiple Read",
+    "Read": "Read",
+    "RegisterAddress": "RegisterAddress",
+    "Send": "Send",
+    "SendValue": "Send Raw Message",
+    "SpecialFunctions": "Special Functions",
+    "Write": "Write",
+    "WriteSuccess": "WriteSuccess",
+    "WriteValue": "WriteValue"
+  },
+  "ThingsGateway.Debug.DeviceComponentBase": {
+    "ArrayLength": "ArrayLength",
+    "DataType": "DataType",
+    "DefaultSend": "DefaultSend",
+    "RegisterAddress": "RegisterAddress",
+    "Send": "Send",
+    "SendValue": "Send Raw Message",
+    "WriteSuccess": "WriteSuccess",
+    "WriteValue": "WriteValue"
+  },
+  "ThingsGateway.Foundation.ChannelOptionsDefault": {
+    "BaudRate": "BaudRate",
+    "BindUrl": "BindUrl",
+    "CacheTimeout": "CacheTimeout",
+    "ChannelType": "ChannelType",
+    "CheckClearTime": "CheckClearTime",
+    "ConnectTimeout": "ConnectTimeout",
+    "DataBits": "DataBits",
+    "DtrEnable": "DtrEnable",
+    "DtuId": "DtuId",
+    "DtuSeviceType": "DtuSeviceType",
+    "Heartbeat": "Heartbeat",
+    "DtuIdHex": "DtuIdHex",
+    "HeartbeatHex": "HeartbeatHex",
+    "HeartbeatTime": "HeartbeatTime",
+    "MaxClientCount": "MaxClientCount",
+    "MaxConcurrentCount": "MaxConcurrentCount",
+    "Name": "Name",
+    "Name.Required": "{0} cannot be empty",
+    "Parity": "Parity",
+    "PortName": "PortName",
+    "RemoteUrl": "RemoteUrl",
+    "RtsEnable": "RtsEnable",
+    "StreamAsync": "StreamAsync",
+    "Handshake": "Handshake",
+    "StopBits": "StopBits"
+  }
+}

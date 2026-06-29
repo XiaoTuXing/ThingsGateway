@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "ThingsGateway.Debug.Photino": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_RuntimeAsync": "1"
+      }
+    }
+  }
+}

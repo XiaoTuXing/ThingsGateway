@@ -1,0 +1,12 @@
+﻿{
+  "ThingsGateway.Plugin.Kafka.KafkaProducerProperty": {
+    "BootStrapServers": "BootStrapServers",
+    "Timeout": "Timeout",
+    "SaslUsername": "SaslUsername",
+    "SaslPassword": "SaslPassword",
+    "SecurityProtocol": "SecurityProtocol",
+    "SaslMechanism": "SaslMechanism"
+
+   
+  }
+}

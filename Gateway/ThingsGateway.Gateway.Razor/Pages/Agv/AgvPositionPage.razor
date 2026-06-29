@@ -1,0 +1,42 @@
+@page "/gateway/agvposition"
+@attribute [Authorize]
+@attribute [RolePermission]
+@inherits ThingsGateway.Admin.Razor.ComponentDefault
+@using ThingsGateway.Gateway.Application
+@using ThingsGateway.Admin.Razor
+@using ThingsGateway.Admin.Application
+@namespace ThingsGateway.Gateway.Razor
+
+<div class="row h-100 g-0">
+
+    <div class="col-0 col-sm-2 h-100">
+        <Card IsShadow=true class="h-100" Color="Color.Primary">
+            <BodyTemplate>
+                <OrgTree ValueChanged="TreeChangedAsync"></OrgTree>
+            </BodyTemplate>
+        </Card>
+
+    </div>
+    <div class="col-12 col-sm-10 h-100 ps-2">
+        <AdminTable @ref=table TItem="AgvPosition" AutoGenerateColumns="true"
+                    ShowSearch=false
+                    AllowResizing="true"
+                    IsFixedHeader=true
+                    IsMultipleSelect=true
+                    EditDialogSize="Size.Large"
+                    ShowExtendButtons=true
+                    ShowEditButton=false
+                    ExtendButtonColumnWidth=130
+                    IsPagination=true
+                    OnQueryAsync="OnQueryAsync" OnSaveAsync="Save" OnDeleteAsync="Delete">
+            <EditTemplate Context="context">
+                <AgvPositionEdit Model=context></AgvPositionEdit>
+            </EditTemplate>
+        </AdminTable>
+    </div>
+</div>
+
+@code {
+    [NotNull]
+    AdminTable<AgvPosition>? table { get; set; }
+}

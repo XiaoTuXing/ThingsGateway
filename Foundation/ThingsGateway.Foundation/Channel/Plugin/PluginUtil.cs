@@ -1,0 +1,107 @@
+//------------------------------------------------------------------------------
+//  此代码版权声明为全文件覆盖，如有原作者特别声明，会在下方手动补充
+//  此代码版权（除特别声明外的代码）归作者本人Diego所有
+//  源代码使用协议遵循本仓库的开源协议及附加协议
+//  Gitee源代码仓库：https://gitee.com/diego2098/ThingsGateway
+//  Github源代码仓库：https://github.com/kimdiego2098/ThingsGateway
+//  使用文档：https://thingsgateway.cn/
+//  QQ群：605534569
+//------------------------------------------------------------------------------
+
+namespace ThingsGateway.Foundation;
+
+/// <inheritdoc/>
+public static class PluginUtil
+{
+    /// <summary>
+    /// 作为DTU终端
+    /// </summary>
+    public static Action<IPluginManager> GetDtuClientPlugin(IChannelOptions channelOptions)
+    {
+        if (!channelOptions.DtuId.IsNullOrWhiteSpace())
+        {
+            Action<IPluginManager> action = a => { };
+
+            action += a =>
+            {
+                var plugin = a.Add<HeartbeatAndReceivePlugin>();
+                plugin.HeartbeatHex = channelOptions.HeartbeatHex;
+                plugin.DtuIdHex = channelOptions.DtuIdHex;
+                plugin.Heartbeat = channelOptions.Heartbeat;
+                plugin.DtuId = channelOptions.DtuId;
+                plugin.HeartbeatTime = channelOptions.HeartbeatTime;
+            };
+
+            if (channelOptions.ChannelType == ChannelTypeEnum.TcpClient)
+            {
+                action += a => a.UseReconnection<IClientChannel>().SetActionForCheck((channel, failCount) =>
+                {
+                    if (channel.Online)
+                    {
+                        return Task.FromResult(ConnectionCheckResult.Alive);
+                    }
+                    else
+                    {
+                        if (failCount > 1)
+                        {
+                            return Task.FromResult(ConnectionCheckResult.Dead);
+                        }
+                        return Task.FromResult(ConnectionCheckResult.Skip);
+                    }
+
+
+                })
+                .SetPollingTick(TimeSpan.FromSeconds(5)
+
+                );
+            }
+            return action;
+        }
+        return a => { };
+    }
+
+    /// <summary>
+    /// 作为DTU服务
+    /// </summary>
+    public static Action<IPluginManager> GetDtuPlugin(IChannelOptions channelOptions)
+    {
+        Action<IPluginManager> action = a => { };
+
+        action += GetTcpServicePlugin(channelOptions);
+        //if (!channelOptions.Heartbeat.IsNullOrWhiteSpace())
+        {
+            action += a =>
+            {
+                var plugin = a.Add<DtuPlugin>();
+                plugin.HeartbeatHex = channelOptions.HeartbeatHex;
+                plugin.Heartbeat = channelOptions.Heartbeat;
+                plugin.DtuIdHex = channelOptions.DtuIdHex;
+            };
+        }
+        return action;
+    }
+
+    /// <summary>
+    /// 作为TCP服务
+    /// </summary>
+    /// <param name="channelOptions"></param>
+    /// <returns></returns>
+    public static Action<IPluginManager> GetTcpServicePlugin(IChannelOptions channelOptions)
+    {
+        Action<IPluginManager> action = a => { };
+        if (channelOptions.CheckClearTime > 0)
+        {
+            action += a =>
+            {
+                a.UseTcpSessionCheckClear()
+        .SetCheckClearType(CheckClearType.All)
+        .SetTick(TimeSpan.FromMilliseconds(channelOptions.CheckClearTime))
+        .SetOnClose((c, t) =>
+        {
+            return c.CloseAsync($"{channelOptions.CheckClearTime}ms Timeout");
+        });
+            };
+        }
+        return action;
+    }
+}

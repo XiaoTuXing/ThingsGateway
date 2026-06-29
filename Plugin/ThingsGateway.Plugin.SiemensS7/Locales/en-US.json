@@ -1,0 +1,10 @@
+﻿{
+  "ThingsGateway.Plugin.SiemensS7.SiemensS7MasterProperty": {
+    "SiemensS7Type": "SiemensS7Type",
+    "Rack": "Rack",
+    "LocalTSAP": "LocalTSAP",
+    "Slot": "Slot"
+
+
+  }
+}

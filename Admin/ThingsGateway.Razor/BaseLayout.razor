@@ -1,0 +1,12 @@
+﻿@inherits LayoutComponentBase
+@namespace ThingsGateway.Razor
+@using ThingsGateway.NewLife.Log
+
+@* BB根组件 *@
+<BootstrapBlazorRoot OnErrorHandleAsync="(log,ex)=>{XTrace.WriteException(ex);return Task.CompletedTask; }">
+    @Body
+
+</BootstrapBlazorRoot>
+
+
+

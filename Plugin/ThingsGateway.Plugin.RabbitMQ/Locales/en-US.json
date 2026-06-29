@@ -1,0 +1,13 @@
+﻿{
+  "ThingsGateway.Plugin.RabbitMQ.RabbitMQProducerProperty": {
+    "IP": "IP",
+    "Port": "Port",
+    "UserName": "UserName",
+    "Password": "Password",
+    "IsQueueDeclare": "IsQueueDeclare",
+    "VirtualHost": "VirtualHost",
+    "ExchangeName": "ExchangeName"
+
+   
+  }
+}

@@ -1,0 +1,13 @@
+﻿{
+  "ThingsGateway.Plugin.Webhook.WebhookVariableProperty": {
+  },
+  "ThingsGateway.Plugin.Webhook.WebhookProperty": {
+
+    "DeviceTopic": "DeviceCallbackUrl",
+    "VariableTopic": "VariableCallbackUrl",
+    "AlarmTopic": "AlarmCallbackUrl"
+    
+
+  }
+
+}

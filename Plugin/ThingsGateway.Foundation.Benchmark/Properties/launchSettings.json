@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "ThingsGateway.Foundation.Benchmark": {
+      "commandName": "Project",
+      "environmentVariables": {
+        //"DOTNET_RuntimeAsync": "1"
+      }
+    }
+  }
+}

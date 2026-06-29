@@ -1,0 +1,1 @@
+set WebEnable=false && set ASPNETCORE_ENVIRONMENT=WebDisable && ThingsGateway.Server.exe
